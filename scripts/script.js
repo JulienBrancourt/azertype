@@ -1,41 +1,38 @@
 function afficherResultat(score, nombreMots) {
-	console.log("Votre score est de " + score +" sur " + nombreMots);
+	console.log("Votre score est de " + score + " sur " + nombreMots);
+	let spanScore = document.querySelector(".zoneScore span");
+	let affichageScore = `${score}/${nombreMots}`;
+
+	spanScore.innerHTML = affichageScore;
 }
 
-function choisirPhrasesOuMots() {
-	let choix = prompt("Voulez-vous copier les mots ou les phrases ?")
-
-	while (choix !== "mots" && choix !== "phrases") {
-		choix = prompt(
-		"Avec quelle liste désirez-vous jouer : 'mots' ou 'phrases' ?"
-		);
-	}
-	return choix
-}
-
-function lancerBoucleDeJeu(listePropositions) {
-	let score = 0
-	for (let i = 0; i < listePropositions.length; i++) {
-		let motUtilisateur = prompt("Entrez le mot " + listePropositions[i]);
-		if (motUtilisateur === listePropositions[i]) {
-		score++;	
-	}
-	}
-	return score
+function afficherProposition(proposition) {
+	let zoneProposition = document.querySelector(".zoneProposition");
+	zoneProposition.innerHTML = proposition;
 }
 
 function lancerJeu() {
-	let choix = choisirPhrasesOuMots()
-	let score = 0
-	let nombreMots = 0
+	let score = 0;
+	let btnValiderMot = document.getElementById("btnValiderMot");
+	let inputEcriture = document.getElementById("inputEcriture");
+	let i = 0;
 
-	if (choix === 'mots') {
-		score = lancerBoucleDeJeu(listeMots)
-		nombreMots = listeMots.length
-	} else {
-		score = lancerBoucleDeJeu(listePhrases)
-		nombreMots = listePhrases.length
-	}
+	afficherProposition(listeMots[i]);
 
-	afficherResultat(score, nombreMots)
+	btnValiderMot.addEventListener("click", () => {
+		if (listeMots[i] === inputEcriture.value) {
+			score++;
+		}
+		i++;
+		afficherResultat(score, i);
+		inputEcriture.value = '';
+		if (listeMots[i] === undefined) {
+			afficherProposition("Le jeu est fini");
+			btnValiderMot.disabled = true;
+		} else {
+			afficherProposition(listeMots[i]);
+		}
+	});
+
+	// afficherResultat(score, i);
 }
